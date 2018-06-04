@@ -28,3 +28,6 @@ after_success:
   - echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
   - docker build -t norrkin/sonarr . 
   - docker push norrkin/sonarr
+
+notifications:
+  webhooks: https://hooks.microbadger.com/images/norrkin/sonarr/wl0nDwO33xrooMJx8LbYsC4oPN0=
