@@ -1,0 +1,30 @@
+sudo: required
+services:
+  - docker
+
+language: python
+
+env:
+  global:
+  - GOSS_VERSION=0.3.6
+  - GOSS_PATH=/usr/local/bin/goss
+  - secure: "JjOyGbnfgL8ruBbBC6nCzCCkrFqpp0febpQRyjePYxSQBKGJJygsmkO6lNhJm1JwkDJmVvcDS84EtrbV0A2QYEq5BgaQv2FU8Myx0VhmDgfIZ3GdbN2eZq8MxCpyHwsoBpwRB0weDspBi6KwiF5Xdv5OJOgxJORqNHf6tugdRHvHZwwD7K3gMFOAsZp983N9MPcQ9jJhdEWCR3+YeODFeB4s2ECJpd8g00yitv/QDvUEh6Gozi/3joa5uxwZh1i/SdyIKFsal46f9Fwys1fOA+Ckpc1DfgjoaDLfHuoYJyrZunTYOwvg0bdEjoW9xfEBQL0EAorz9dppBxFm9iXoKDDAUyLhP7q1l4MDPBaPDKThLPiPjGGQN8T9DS2XEu4VmjYT7LE0ga+PbvJMjv0LxhFsLEqHCV7Lf3kershAYgeVjoU8KU98vBtWRySEMn/11btF9HAmJ7KZ1tYtYQkjcFu8VbAER+RQf1Z4gbKiTqWKbRraG/EYQnG3P/Ik0/1J/MgDI/xBhXvpBtM/33YTKpA0TgWmuKTPEmG0LMVtb2vnb4wfdZYqL3bRs5omRpAz0X6AN2maJqU1C+TNd+y8dJoHJn5NCgp0QuUnKyFQ/pE2Ctlu150CVRo7aRz3YKc7z2Je1IisKneTA52bicvcl7nud0cEMuYbnW6Gd/D9z0M="
+  - secure: "FNGQZoORq3GNGN0z+Z63Mbx2OeBQeMmaXqnNjT0xtECQjFaO80OCN1KSF+heyAVFOQ7xPbimxy/07t5PN3STFS1VeRHC4BBpWaSh1J//M6ggBlWfljZkH/tBO8ChM4xp5UiS6k0cuJMSuVwWuRtzpf9QLtmOt0qodD3UaTf6vZouDl0jKYK5WAoPAeBO4R3Iw0JrJA/iaoBQowmDST3Jmc/xry5L7A4nJn88u2W3mtZIiAG1xzaJr35dQjdaSsakahKKUE2/b/WKd7Ex8Tu7IYjcCY4cZv1ny010oeyUxPD+yXaRuvMmrO2RHB7kzpegZXxMIYXzbKPs8xvX3tSyD5vCex9cCPvxB1oOKlb9W6qJh/OaRb51pOHP/YIJdnX5AvokIUm6xB3x3DY43+BpJv924gXji8KW91kkppLQv3QRr8Og6rJBSKaIxsNO66l9MeENsaTqJCw/+uiJOp4l0U479HS1yaFDts9Yud2k22hKKpdaqeNSZkJ5r6OD4sJL1Yqvao1hFG3iH+BnP0NiDkBfhDEMCXSAtiXcHh1QN9/EjCoYmWv/GWC9/27pv05SQt139WQp/SxgIwL9WhWlGWsCnXa23aSF6PfAXPqdA1bjFSGCGGl30gHmt/u37xywFQ13Z4StkwocYliya+gAm359Y8bpnvcz6D/7j9Op/J0="
+
+before_install:
+  - sudo curl -L https://github.com/aelsabbahy/goss/releases/download/v$GOSS_VERSION/goss-linux-amd64 -o /usr/local/bin/goss
+  - sudo chmod +rx /usr/local/bin/goss
+  - sudo curl -L https://raw.githubusercontent.com/aelsabbahy/goss/v$GOSS_VERSION/extras/dgoss/dgoss -o /usr/local/bin/dgoss
+  - sudo chmod +rx /usr/local/bin/dgoss
+
+install: true
+
+
+script:
+  - ./test/test.sh
+
+
+after_success:
+  - echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
+  - docker build -t norrkin/sonarr . 
+  - docker push norrkin/sonarr
