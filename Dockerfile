@@ -14,8 +14,8 @@ COPY entrypoint.sh /usr/bin/entrypoint.sh
 RUN apt-get update && apt-get install gnupg -y && \
     apt-key adv --no-tty --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys --batch 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
     echo "deb http://download.mono-project.com/repo/debian stable-stretch main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
-    apt-key adv --no-tty --keyserver keyserver.ubuntu.com --recv-keys --batch FDA5DFFC && \
-    echo "deb http://apt.sonarr.tv/ master main" | tee -a /etc/apt/sources.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0xA236C58F409091A18ACA53CBEBFF6B99D9B78493 && \
+    echo "deb http://apt.sonarr.tv/ master main" | tee /etc/apt/sources.list.d/sonarr.list && \
     apt-get update -q && \
     apt-get install -qy mono-devel nzbdrone=${sonarr_release} mediainfo --no-install-recommends && \
     apt-get autoremove && apt-get clean && \
