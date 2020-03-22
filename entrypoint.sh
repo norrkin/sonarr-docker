@@ -13,7 +13,6 @@ echo "[DONE]"
 printf "Set permissions... "
 chown -R nzbdrone:users /opt/NzbDrone
 chown -R nzbdrone:users /config
-chown -R nzbdrone:users /downloads
 echo "[DONE]"
 
 
